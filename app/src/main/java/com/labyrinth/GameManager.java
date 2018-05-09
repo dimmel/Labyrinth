@@ -1,6 +1,7 @@
 package com.labyrinth;
 
 import android.graphics.Canvas;
+import android.graphics.Rect;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
@@ -13,12 +14,15 @@ public class GameManager extends GestureDetector.SimpleOnGestureListener{
     private List<Drawable> drawables = new ArrayList<>();;
     private View view;
     private Player player;
+    private Maze maze;
+    private Rect rect = new Rect();
+    private int size = 0;
 
     public GameManager(){
         player = new Player();
-
+        maze = new Maze(35);
         drawables.add(player);
-        drawables.add(new Maze());
+        drawables.add(maze);
     }
 
     @Override
@@ -35,12 +39,18 @@ public class GameManager extends GestureDetector.SimpleOnGestureListener{
     public void draw(Canvas canvas){
         for (Drawable drawableItem:
              drawables) {
-            drawableItem.draw(canvas);
+            drawableItem.draw(canvas, rect);
         }
     }
 
-    public void setView(View view) {
-        this.view = view;
-
+    public void setView(View view) {this.view = view;}
+    public void setScreenSize(int width, int height){
+        size = Math.min(width,height);
+        rect.set(
+                (width-size) / 2,
+                (height-size)/2,
+                (width+size)/2,
+                (height+size)/2
+        );
     }
 }
